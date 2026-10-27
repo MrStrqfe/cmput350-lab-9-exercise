@@ -80,10 +80,20 @@ public:
     sf::Vector2f getCameraCenter() const { return mViewCenterWorld; }
 
     // TODO NEW STUFF: Equivalent to above, but for vectors (distances for 1D) instead of points
-    sf::Vector2f windowToWorldDist(const sf::Vector2f& vWindow) { return {}; };
-    sf::Vector2f worldToWindowDist(const sf::Vector2f& vWorld) { return {}; };
-    sf::Vector2f windowPercentToWorldDist(const sf::Vector2f& vWindowPercent) { return {}; };
-    sf::Vector2f worldToWindowPercentDist(const sf::Vector2f& vWorld) { return {}; };
+    sf::Vector2f windowToWorldDist(const sf::Vector2f& vWindow) { 
+        // same thing as windowToWorld, but vectors only apply scaling and rotation
+        return vWindow * mWorldUnitsPerPixel;
+    };
+    sf::Vector2f worldToWindowDist(const sf::Vector2f& vWorld) {
+        // same thing as windowtoWorld, but there is not offset like windowToWorldDist 
+        return vWorld / mWorldUnitsPerPixel;
+    };
+    sf::Vector2f windowPercentToWorldDist(const sf::Vector2f& vWindowPercent) { 
+        return windowToWorldDist(vWindowPercent * mWindowSize);
+    };
+    sf::Vector2f worldToWindowPercentDist(const sf::Vector2f& vWorld) { 
+        return worldToWindowDist(vWorld / mWindowSize);
+    };
     float windowToWorldDist(float vWindow) { return 0.f; };
     float worldToWindowDist(float vWorld) { return 0.f; };
 
